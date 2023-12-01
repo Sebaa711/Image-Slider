@@ -22,23 +22,21 @@ function getSliderNumber(imagesLength, currentIndex, step) {
 }
 
 function handleMove(previousIndex, newIndex, images, sliderBtns) {
+  clearInterval(timer);
   sliderBtns[previousIndex].toggleAttribute("selected");
   images[previousIndex].toggleAttribute("selected");
 
   sliderBtns[newIndex].toggleAttribute("selected");
   images[newIndex].toggleAttribute("selected");
   currentIndexCounter = newIndex;
-  clearTimeout(timer);
-  timer = setTimeout(timerHandler, 5000);
-}
-
-function timerHandler() {
-  handleMove(
-    currentIndexCounter,
-    getSliderNumber(images.length, currentIndexCounter, +1),
-    images,
-    buttons
-  );
+  timer = setInterval(() => {
+    handleMove(
+      currentIndexCounter,
+      getSliderNumber(images.length, currentIndexCounter, 1),
+      images,
+      sliderBtns
+    );
+  }, 5000);
 }
 
 const images = document.querySelectorAll(".img-container img");
@@ -48,7 +46,7 @@ buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
     handleMove(
       currentIndexCounter,
-      e.target.getAttribute("data-index"),
+      parseInt(e.target.getAttribute("data-index")),
       images,
       buttons
     );
@@ -75,4 +73,11 @@ nextButton.addEventListener("click", () => {
   );
 });
 
-timer = setTimeout(timerHandler, 5000);
+timer = setInterval(() => {
+  handleMove(
+    currentIndexCounter,
+    getSliderNumber(images.length, currentIndexCounter, 1),
+    images,
+    buttons
+  );
+}, 5000);
